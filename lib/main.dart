@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_list/firebase_options.dart';
-import 'package:todo_list/screens/landing_page.dart';
+// import 'package:todo_list/screens/landing_page.dart';
 import 'package:todo_list/screens/todo.dart';
 
 void main(List<String> args) async {
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(brightness: Brightness.dark),
       debugShowCheckedModeBanner: false,
-      home: TodoScreen(),
+      home: const TodoScreen(),
     );
   }
 }

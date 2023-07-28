@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:todo_list/screens/add_task.dart';
+import 'package:todo_list/services/database/writer.dart';
 
 class TodoScreen extends StatelessWidget {
   const TodoScreen({super.key});
@@ -31,8 +33,11 @@ class TodoScreen extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Icon(Icons.add_task),
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => AddTask()));
+        },
+        child: const Icon(Icons.add_task),
       ),
     );
   }

@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:todo_list/services/database/writer.dart';
 
 class AddTask extends StatelessWidget {
   const AddTask({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController _titleController = TextEditingController();
+    final TextEditingController _descriptionController =
+        TextEditingController();
     final Widget smallspace = SizedBox(
       height: 50.0,
     );
@@ -20,6 +24,7 @@ class AddTask extends StatelessWidget {
           children: [
             smallspace,
             TextFormField(
+              controller: _titleController,
               style: const TextStyle(fontSize: 14),
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(
@@ -37,6 +42,7 @@ class AddTask extends StatelessWidget {
             ),
             smallspace,
             TextFormField(
+              controller: _descriptionController,
               keyboardType: TextInputType.multiline,
               maxLines: null,
               style: const TextStyle(fontSize: 14),
@@ -58,9 +64,32 @@ class AddTask extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                  onPressed: () {},
-                  child: Text("Add"),
+                SizedBox(
+                  width: 150,
+                  height: 38,
+                  child: ElevatedButton(
+                      onPressed: () async {
+                        String taskTitle = _titleController.text;
+                        String taskDescription = _descriptionController.text;
+
+                        // Call the function to save the data to Firestore
+                        await DataWriter.create(taskTitle, taskDescription);
+
+                        // Clear the TextFormFields after adding the task
+                        _titleController.clear();
+                        _descriptionController.clear();
+                      },
+                      child: Text(
+                        "Add",
+                      ),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(Colors.black),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                      side: BorderSide(color: Colors.white))))),
                 ),
               ],
             )

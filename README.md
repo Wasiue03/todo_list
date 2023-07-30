@@ -3,6 +3,7 @@
 A Dexplat Internship Flutter Assesment project.
 
 ## Features
+- Register
 - Add New Task
     - Task Tittle
     - Task Description

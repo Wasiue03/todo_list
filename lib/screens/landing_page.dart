@@ -1,13 +1,11 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:todo_list/screens/register_page.dart';
 
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    Widget smallspcae = SizedBox(height: 20);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -32,7 +30,7 @@ class LandingScreen extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 150,
+              height: 200,
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -42,12 +40,15 @@ class LandingScreen extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                minimumSize: Size(200, 45),
+                minimumSize: Size(300, 45),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => RegisterScreen()));
+              },
               child: Text(
                 'Register',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
             ),
           ],

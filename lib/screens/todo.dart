@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:todo_list/screens/add_task.dart';
 import 'package:todo_list/services/database/delete.dart';
 import 'package:todo_list/services/database/read_data.dart';
-import 'package:todo_list/services/database/update.dart';
-import 'package:todo_list/services/database/writer.dart';
 
 class TodoScreen extends StatelessWidget {
   const TodoScreen({super.key});
@@ -39,7 +37,12 @@ class TodoScreen extends StatelessWidget {
                   ),
                   clipBehavior: Clip.hardEdge,
                   child: ListTile(
-                      title: Text(task['title']),
+                      title: Text(
+                        task['title'],
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       subtitle: Text(task['Desc']),
                       trailing: InkWell(
                         onTap: () => delete(tasks[index].id),

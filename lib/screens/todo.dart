@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/screens/add_task.dart';
+import 'package:todo_list/services/database/delete.dart';
 import 'package:todo_list/services/database/read_data.dart';
+import 'package:todo_list/services/database/update.dart';
 import 'package:todo_list/services/database/writer.dart';
 
 class TodoScreen extends StatelessWidget {
@@ -27,9 +29,22 @@ class TodoScreen extends StatelessWidget {
               itemCount: tasks.length,
               itemBuilder: (context, index) {
                 final task = tasks[index].data();
-                return ListTile(
-                  title: Text(task['title']),
-                  subtitle: Text(task['Desc']),
+                return Card(
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                      color: Colors.blueGrey,
+                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(12)),
+                  ),
+                  clipBehavior: Clip.hardEdge,
+                  child: ListTile(
+                      title: Text(task['title']),
+                      subtitle: Text(task['Desc']),
+                      trailing: InkWell(
+                        onTap: () => delete(tasks[index].id),
+                        child: Icon(Icons.delete),
+                      )),
                 );
               },
             );
@@ -48,5 +63,9 @@ class TodoScreen extends StatelessWidget {
         child: const Icon(Icons.add_task),
       ),
     );
+  }
+
+  void delete(String documentId) {
+    DeleteData.delete(documentId);
   }
 }

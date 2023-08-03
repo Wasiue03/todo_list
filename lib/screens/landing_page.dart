@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list/screens/register_page.dart';
+import 'package:todo_list/screens/login/signin.dart';
+import 'package:todo_list/screens/register/register_page.dart';
 
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
@@ -31,6 +32,28 @@ class LandingScreen extends StatelessWidget {
             ),
             SizedBox(
               height: 200,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.black,
+                elevation: 3,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                minimumSize: Size(300, 45),
+              ),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SigninScreen()));
+              },
+              child: Text(
+                'Sign In',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+            ),
+            SizedBox(
+              height: 20.0,
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(

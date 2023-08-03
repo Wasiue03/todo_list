@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_list/services/database/writer.dart';
+import 'package:todo_list/widgets/add_button.dart';
 
 class AddTask extends StatelessWidget {
   const AddTask({super.key});
@@ -92,7 +93,7 @@ class AddTask extends StatelessWidget {
                                       side: BorderSide(color: Colors.white))))),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),

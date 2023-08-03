@@ -1,16 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:todo_list/services/auth/auth_provider.dart';
+import 'package:todo_list/models/user_auth.dart';
 import 'package:todo_list/screens/todo.dart';
-import 'package:todo_list/services/database/register.dart';
 
 class RegisterScreen extends StatelessWidget {
-  const RegisterScreen({super.key});
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final TextEditingController _nameController = TextEditingController();
     final TextEditingController _emailController = TextEditingController();
-    final TextEditingController _dobController = TextEditingController();
+    final TextEditingController _passwordController = TextEditingController();
     final Widget smallspace = SizedBox(
       height: 50.0,
     );
@@ -43,15 +44,13 @@ class RegisterScreen extends StatelessWidget {
               smallspace,
               TextFormField(
                 controller: _emailController,
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
                 style: const TextStyle(fontSize: 14),
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 20,
                     vertical: 20,
                   ),
-                  hintText: 'Eamil',
+                  hintText: 'Email',
                   hintStyle: const TextStyle(fontSize: 14),
                   icon: const Icon(CupertinoIcons.bubble_left_bubble_right,
                       color: Colors.brown),
@@ -62,16 +61,15 @@ class RegisterScreen extends StatelessWidget {
               ),
               smallspace,
               TextFormField(
-                controller: _dobController,
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
+                controller: _passwordController,
+                obscureText: true,
                 style: const TextStyle(fontSize: 14),
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 20,
                     vertical: 20,
                   ),
-                  hintText: 'Date Of Birth',
+                  hintText: 'Password',
                   hintStyle: const TextStyle(fontSize: 14),
                   icon: const Icon(CupertinoIcons.bubble_left_bubble_right,
                       color: Colors.brown),
@@ -88,38 +86,47 @@ class RegisterScreen extends StatelessWidget {
                     width: 150,
                     height: 38,
                     child: ElevatedButton(
-                        onPressed: () async {
-                          String name = _nameController.text;
-                          String email = _emailController.text;
-                          String dob = _dobController.text;
+                      onPressed: () async {
+                        String name = _nameController.text;
+                        String email = _emailController.text;
+                        String password = _passwordController.text;
 
-                          // Call the function to save the data to Firestore
-                          await UserWriter.create(name, email, dob);
+                        // Call the function to register the user
+                        try {
+                          await AuthProvider.register(password, email, name);
 
-                          // Clear the TextFormFields after adding the task
+                          // Clear the TextFormFields after successful registration
                           _nameController.clear();
                           _emailController.clear();
-                          _dobController.clear();
+                          _passwordController.clear();
 
+                          // Navigate to the TodoScreen after successful registration
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => TodoScreen()));
-                        },
-                        child: Text(
-                          "Register",
+                        } catch (e) {
+                          // Handle registration failure if needed
+                          // e.g., Show an error message
+                          debugPrint("Error in registration: ${e.toString()}");
+                        }
+                      },
+                      child: Text("Register"),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.black),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: BorderSide(color: Colors.white),
+                          ),
                         ),
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStatePropertyAll<Color>(Colors.black),
-                            shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                    side: BorderSide(color: Colors.white))))),
+                      ),
+                    ),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),

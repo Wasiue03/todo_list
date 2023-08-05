@@ -2,14 +2,21 @@ import 'package:flutter/material.dart';
 
 import '../services/database/writer.dart';
 
-class AddButton extends StatelessWidget {
+class AddButton extends StatefulWidget {
   const AddButton({super.key});
+  @override
+  State<AddButton> createState() => _AddButtonState();
+}
+
+class _AddButtonState extends State<AddButton> {
+  Widget smallsize = const SizedBox(
+    height: 40.0,
+  );
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController _titleController = TextEditingController();
-    final TextEditingController _descriptionController =
-        TextEditingController();
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

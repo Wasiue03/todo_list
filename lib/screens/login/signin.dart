@@ -1,20 +1,24 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_list/services/auth/auth_provider.dart';
 
 import 'package:todo_list/screens/todo.dart';
 
-class SigninScreen extends StatelessWidget {
+class SigninScreen extends StatefulWidget {
   const SigninScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    Widget smallsize = SizedBox(
-      height: 40.0,
-    );
-    final TextEditingController _usernameController = TextEditingController();
-    final TextEditingController _passwordController = TextEditingController();
+  State<SigninScreen> createState() => _SignInPageState();
+}
 
+class _SignInPageState extends State<SigninScreen> {
+  Widget smallsize = const SizedBox(
+    height: 40.0,
+  );
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text("Sign In")),

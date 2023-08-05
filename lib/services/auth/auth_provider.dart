@@ -1,17 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_list/models/user_auth.dart';
 
 class AuthProvider {
-  static final auth = FirebaseAuth.instance;
+  static final _auth = FirebaseAuth.instance;
   static final firestore = FirebaseFirestore.instance;
 
-  static Future<UserCredential?> register(
+  static Future<UserCredential> register(
       BuildContext context, String password, String email, String name) async {
     try {
-      final user = await auth.createUserWithEmailAndPassword(
+      final user = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       await user.user!.sendEmailVerification();
 
@@ -32,7 +31,7 @@ class AuthProvider {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text('The account already exists for that email.')));
       }
-      return null;
+      rethrow;
     } catch (e) {
       debugPrint("Error in Auth Provider");
       debugPrint(e.toString());
@@ -40,10 +39,10 @@ class AuthProvider {
     }
   }
 
-  static Future<UserAuth?> login(
+  static Future<UserAuth> login(
       BuildContext context, String email, String password) async {
     try {
-      final creds = await auth.signInWithEmailAndPassword(
+      final creds = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -62,14 +61,15 @@ class AuthProvider {
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Invalid Email or password!')));
       }
+      rethrow;
     } catch (e) {
       debugPrint("Error in Auth Provider");
       debugPrint(e.toString());
-      return null;
+      rethrow;
     }
   }
 
   static Future<void> logout() async {
-    await auth.signOut();
+    await _auth.signOut();
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_list/services/auth/auth_provider.dart';
-import 'package:todo_list/models/user_auth.dart';
+
 import 'package:todo_list/screens/todo.dart';
 
 class SigninScreen extends StatelessWidget {
@@ -78,9 +78,9 @@ class SigninScreen extends StatelessWidget {
                   String username = _usernameController.text;
                   String password = _passwordController.text;
 
-                  // Call the function to sign in the user
                   try {
-                    final user = await AuthProvider.login(username, password);
+                    final user =
+                        await AuthProvider.login(context, username, password);
 
                     if (user != null) {
                       // Clear the TextFormFields after successful sign in

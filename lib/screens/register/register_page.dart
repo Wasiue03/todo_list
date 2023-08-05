@@ -1,20 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_list/services/auth/auth_provider.dart';
-import 'package:todo_list/models/user_auth.dart';
-import 'package:todo_list/screens/todo.dart';
 
-class RegisterScreen extends StatelessWidget {
+import '../../utilis/constant/firebase_constants.dart';
+import '../Email_Verification/email_verification.dart';
+
+class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
+  @override
+  _RegisterScreenState createState() => _RegisterScreenState();
+}
 
+class _RegisterScreenState extends State<RegisterScreen> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
+  final Widget smallspace = const SizedBox(
+    height: 50.0,
+  );
   @override
   Widget build(BuildContext context) {
-    final TextEditingController _nameController = TextEditingController();
-    final TextEditingController _emailController = TextEditingController();
-    final TextEditingController _passwordController = TextEditingController();
-    final Widget smallspace = SizedBox(
-      height: 50.0,
-    );
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text("Register")),
@@ -82,18 +88,23 @@ class RegisterScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    width: 150,
-                    height: 38,
-                    child: ElevatedButton(
+                  if (_isLoading)
+                    const CircularProgressIndicator()
+                  else
+                    ElevatedButton(
                       onPressed: () async {
+                        setState(() {
+                          _isLoading = true;
+                        });
+
                         String name = _nameController.text;
                         String email = _emailController.text;
                         String password = _passwordController.text;
 
                         // Call the function to register the user
                         try {
-                          await AuthProvider.register(password, email, name);
+                          await AuthProvider.register(
+                              context, password, email, name);
 
                           // Clear the TextFormFields after successful registration
                           _nameController.clear();
@@ -101,13 +112,19 @@ class RegisterScreen extends StatelessWidget {
                           _passwordController.clear();
 
                           // Navigate to the TodoScreen after successful registration
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => TodoScreen()));
+                          if (auth.currentUser != null ||
+                              password != 'weak-password' ||
+                              email != 'email-already-in-use') {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (ctx) =>
+                                        const EmailVerificationScreen()));
+                          }
+                          setState(() {
+                            _isLoading = false;
+                          });
                         } catch (e) {
-                          // Handle registration failure if needed
-                          // e.g., Show an error message
                           debugPrint("Error in registration: ${e.toString()}");
                         }
                       },
@@ -124,7 +141,6 @@ class RegisterScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ),
                 ],
               ),
             ],

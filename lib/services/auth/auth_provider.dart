@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:todo_list/models/user_auth.dart';
+
+import '../TaskProvider/task_provider.dart';
 
 class AuthProvider {
   static final _auth = FirebaseAuth.instance;
@@ -71,5 +74,37 @@ class AuthProvider {
 
   static Future<void> logout() async {
     await _auth.signOut();
+  }
+
+  Future<UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  }
+
+  static Future<void> saveUserTasks(List<Task> tasks) async {
+    final user = _auth.currentUser;
+    if (user == null)
+      return; // Ensure the user is signed in before saving tasks
+
+    final tasksCollection =
+        firestore.collection('users').doc(user.uid).collection('tasks');
+
+    // Convert tasks to maps and save them in Firestore
+    tasks.forEach((task) {
+      tasksCollection.add(task.toMap());
+    });
   }
 }
